@@ -1,3 +1,4 @@
-<div>
-    <!-- I begin to speak only when I am certain what I will say is not better left unsaid. - Cato the Younger -->
-</div>
+<x-layout>
+    <x-slot:title>{{$title}}</x-slot:title>
+    <h3>ini adalah halaman homepage</h3>
+</x-layout>
