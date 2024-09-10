@@ -40,3 +40,5 @@ Another component is created for the navbar links <code>nav-link.blade.php</code
 <x-nav-link href="/about" :active="request()->is('about')">About</x-nav-link>
 <x-nav-link href="/contact" :active="request()->is('contact')">Contact</x-nav-link>
 ```
+### Result
+![alt text](repo_images/image.png)
