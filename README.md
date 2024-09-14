@@ -42,3 +42,10 @@ Another component is created for the navbar links <code>nav-link.blade.php</code
 ```
 ### Result
 ![alt text](repo_images/image.png)
+
+
+## Progress up to Episode 5
+### Viewing data
+
+
+### Storing data in model

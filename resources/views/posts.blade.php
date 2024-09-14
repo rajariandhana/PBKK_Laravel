@@ -13,7 +13,7 @@
                 {{$post['body']}}
             </p>
             {{-- href="/posts/{{$id}}"  --}}
-            <a href="/posts/1" class="font-medium text-blue-500">Read more &raquo;</a>
+            <a href="/posts/{{$post['slug']}}" class="font-medium text-blue-500">Read more &raquo;</a>
         </article>
     @endforeach
 
