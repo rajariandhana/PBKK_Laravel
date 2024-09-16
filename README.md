@@ -41,11 +41,15 @@ Another component is created for the navbar links <code>nav-link.blade.php</code
 <x-nav-link href="/contact" :active="request()->is('contact')">Contact</x-nav-link>
 ```
 ### Result
-![alt text](repo_images/image.png)
+![alt text](repo_images/result1.png)
 
 
-## Progress up to Episode 5
+## Progress up to Episode 7
 ### Viewing data
 
 
 ### Storing data in model
+
+### Result
+![alt text](repo_images/result2.png)
+![alt text](repo_images/result3.png)
