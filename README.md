@@ -45,11 +45,78 @@ Another component is created for the navbar links <code>nav-link.blade.php</code
 
 
 ## Progress up to Episode 7
-### Viewing data
 
 
 ### Storing data in model
+Since we have not implement database, we can store our posts in the <code>Post.php</code> model with the attributes id, slug, title, author, date, and body. The data are stored in a static function <code>all()</code> that returns an array of the posts.
+```php
+public static function all(){
+    return [
+        [
+            'id'=>1,
+            'slug'=>'judul-artikel-1',
+            'title'=>'Judul Artikel 1',
+            'author'=>'john',
+            'date'=>'11 September 2024',
+            'body'=>'example body text here'
+        ], 
+        //more posts
+    ]
+}
+```
+A function that returns a post when given a model is also created. The reason of using a slug instead of an id is a slug is more secure since we cannot guess an id by numbers. It is also make it more readable for users.
+```php
+public static function find($slug): array{
+    $post = Arr::first(static::all(),function ($post) use ($slug){
+        return $post['slug']==$slug;
+    });
+    if(!$post) abort(404);
+    return $post;
+}
+```
+
+### Passing data from model to view
+We can pass variables to a view with the following code. For example in the <code>/posts</code> we pass the variable <code>title</code> with the value <code>Blog</code> and the variable <code>posts</code> with the return value from the previously made static function <code>all</code> in the <code>Post</code> model.
+```php
+Route::get('/posts', function () {
+    return view('posts',[
+        'title'=>'Blog',
+        'posts'=> Post::all()
+    ]);
+});
+```
+Suppose we want to search for a specific post, we can pass the slug into the route then create a function that takes a slug and returns the view with the specific post by using the <code>find</code>> function.
+```php
+Route::get('/posts/{slug}',function($slug){
+    $post = Post::find($slug);
+    return view('post',[
+        'title'=>'Single Post',
+        'post'=>$post
+    ]);
+});
+```
+
+### Viewing data in blade
+The previously passed variable can be used in the blade like this. <code>foreach</code> is a built in looping function in blade. We can pass the <code>posts</code> variable so we can show all posts in the model. Suppose we want to display the value of an attribute we can do <code>{{$post['attribute']}}</code> in the view.
+```php
+@foreach ($posts as $post)   
+    <article class="max-w-screen-md py-8 border-b border-gray-500">
+        <h2 class="mb-1 text-3xl font-bold tracking-tight text-gray-900 hover:underline">{{$post['title']}}</h2>
+        <div class="text-base text-gray-500">
+            <a href="">{{$post['author']}}</a> | {{$post['date']}}
+        </div>
+        <p class="my-4 font-light">
+            {{-- {{Str::limit($post['body'],100)}} --}}
+            {{$post['body']}}
+        </p>
+        {{-- href="/posts/{{$id}}"  --}}
+        <a href="/posts/{{$post['slug']}}" class="font-medium text-blue-500">Read more &raquo;</a>
+    </article>
+@endforeach
+```
 
 ### Result
+<code>/posts</code>
 ![alt text](repo_images/result2.png)
+<code>/posts/judul-artikel-1</code>
 ![alt text](repo_images/result3.png)
