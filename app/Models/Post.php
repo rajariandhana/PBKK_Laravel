@@ -9,8 +9,8 @@ use Illuminate\Database\Eloquent\Model;
 class Post extends Model
 {
     // use HasFactory;
-    // protected $fillable = ['slug','title','author','body'];
-    protected $guarded = ['id'];
+    protected $fillable = ['slug','title','author','body'];
+    // protected $guarded = ['id'];
 
     // public static function find($slug): array{
     //     $post = Arr::first(static::all(),function ($post) use ($slug){
