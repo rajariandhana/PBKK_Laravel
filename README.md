@@ -120,3 +120,8 @@ The previously passed variable can be used in the blade like this. <code>foreach
 ![alt text](repo_images/result2.png)
 <code>/posts/judul-artikel-1</code>
 ![alt text](repo_images/result3.png)
+
+## Progress up to Episode 7
+Migrations is the way to define your tables and it's attributes for your database. Run <code>php artisan make:migration</code> to create a migration. After defining the attributes according to the data type and constraints, run <code>php artisan migrate</code> that would create your tables into your configured database.
+
+Model will be the architecture that interacts with the database directly. When creating a model, it automatically binds to a certain table (there is also a way to manually bind a table with a model). A model already has a built in function like <code>all()</code> and <code>find()</code> that do not need to be defined anymore. We can also set which attributes can be filled by the user by writing <code>protected $fillable = ['attributeName']</code> or vice versa by writing <code>protected $guarded = ['attributeName']</code>.
