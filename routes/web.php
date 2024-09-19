@@ -1,9 +1,10 @@
 <?php
 
+use App\Models\Post;
+use App\Models\User;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
-use App\Models\Post;
 
 Route::get('/', function () {
     return view('home',[
@@ -21,6 +22,13 @@ Route::get('/posts/{post:slug}',function(Post $post){
     return view('post',[
         'title'=>'Single Post',
         'post'=>$post
+    ]);
+});
+Route::get('/authors/{user:id}',function(User $user){
+    // dd("t");
+    return view('posts',[
+        'title'=>'Articles by '.$user->name,
+        'posts'=>$user->posts
     ]);
 });
 

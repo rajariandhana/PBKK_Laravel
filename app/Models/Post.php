@@ -2,14 +2,21 @@
 
 namespace App\Models;
 
+use App\Models\User;
 use Illuminate\Support\Arr;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Post extends Model
 {
+    // php artisan tinker
+    // App\Models\Post::factory(20)->recycle(User::factory(5)->create())->create();
     use HasFactory;
     protected $fillable = ['slug','title','author','body'];
+    public function author(): BelongsTo{
+        return $this->belongsTo(User::class);
+    }
     // protected $guarded = ['id'];
 
     // public static function find($slug): array{
