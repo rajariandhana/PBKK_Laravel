@@ -125,3 +125,55 @@ The previously passed variable can be used in the blade like this. <code>foreach
 Migrations is the way to define your tables and it's attributes for your database. Run <code>php artisan make:migration</code> to create a migration. After defining the attributes according to the data type and constraints, run <code>php artisan migrate</code> that would create your tables into your configured database.
 
 Model will be the architecture that interacts with the database directly. When creating a model, it automatically binds to a certain table (there is also a way to manually bind a table with a model). A model already has a built in function like <code>all()</code> and <code>find()</code> that do not need to be defined anymore. We can also set which attributes can be filled by the user by writing <code>protected $fillable = ['attributeName']</code> or vice versa by writing <code>protected $guarded = ['attributeName']</code>.
+
+## Progress up to Episode 13
+
+### Model Relation
+We can define relation between models. Suppose we have a one to many relation between Category and Post, then we can say a Category hasMany Post and a Post belongsTo a Category with the following code.
+<code>Post.php</code>
+```php
+public function category(): BelongsTo{
+    return $this->belongsTo(Category::class);
+}
+```
+<code>Category.php</code>
+```php
+public function posts():HasMany{
+    return $this->hasMany(Post::class);
+}
+```
+By doing so when we have a model of Post then call the <code>category</code> method, we could get the model of the category that is linked with the post. If we call <code>posts</code> in a category model, we would get all posts with that category.
+
+### Factory
+We can use the Faker Library to generate dummy data by defining it an a factory. We can just call the methods inside <code>fake()</code> to get dummy data that we need. We can also call other model's factory in a factory to get the model in it.
+<code>PostFactory.php</code>
+```php
+public function definition(): array{
+    return [
+        'title'=>fake()->sentence(),
+        'author'=>fake()->name(),
+        'author_id'=>User::factory(),
+        'slug'=>Str::slug(fake()->sentence()),
+        'body'=>fake()->text()
+    ];
+}
+```
+Suppose if we want to have a foreign key from a certain table name we can use the following.
+```php
+$table->foreignId('author_id')->constrained(
+    table:'users',
+    indexName:'posts_author_id'
+);
+```
+
+### Seeder
+We can call a factory from a seeder file.
+<code>DatabaseSeeder.php</code>
+```php
+class DatabaseSeeder extends Seeder{
+    public function run(): void{
+        $this->call([CategorySeeder::class, UserSeeder::class]);
+        Post::factory(100)->recycle([Category::all(),User::all()])->create();
+    }
+}
+```
