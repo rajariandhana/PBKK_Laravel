@@ -15,6 +15,7 @@ class Post extends Model
     // App\Models\Post::factory(20)->recycle(User::factory(5)->create())->create();
     use HasFactory;
     protected $fillable = ['slug','title','author','body'];
+    protected $with = ['author','category'];
     public function author(): BelongsTo{
         return $this->belongsTo(User::class);
     }
