@@ -14,9 +14,16 @@ Route::get('/', function () {
 });
 
 Route::get('/posts', function () {
+    $posts = Post::filter(request(['search','category','author']))->latest()->simplePaginate(4)->withQueryString();
+    // $posts = Post::filter(request(['search','category','author']))->latest()->paginate(5)->withQueryString();
+
+    // if(request('search')){
+    //     $posts->where('title','like','%' . request() . '%');
+    // }
+
     return view('posts',[
         'title'=>'Blog',
-        'posts'=> Post::all()
+        'posts'=> $posts
     ]);
 });
 Route::get('/posts/{post:slug}',function(Post $post){
