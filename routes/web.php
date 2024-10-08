@@ -14,9 +14,10 @@ Route::get('/', function () {
 });
 
 Route::get('/posts', function () {
+    $posts = Post::filter(request(['search','category','author']))->latest()->get();
     return view('posts',[
         'title'=>'Blog',
-        'posts'=> Post::latest()->get()
+        'posts'=> $posts
         // 'posts'=> Post::with(['author','category'])->latest()->get()
     ]);
 });
