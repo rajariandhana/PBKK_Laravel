@@ -32,15 +32,18 @@
             <button type="submit" class="text-white absolute end-2.5 bottom-2.5 bg-indigo-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2">Search</button>
         </div>
     </form>
-    <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
-        @foreach ($posts as $post)   
+    {{-- <div class="flex justify-between w-full mb-4"> --}}
+        {{$posts->links()}}
+    {{-- </div> --}}
+    <div class="grid grid-cols-1 gap-6 mt-4 md:grid-cols-2">
+        @forelse ($posts as $post)   
             <article class="max-w-screen-md p-6 bg-white rounded-md shadow-md">
                 <h2 class="mb-1 text-3xl font-bold tracking-tight text-gray-900 hover:underline">{{$post['title']}}</h2>
                 <div class="">
                     By
-                    <a href="/authors/{{$post->author->username}}" class="text-base text-gray-500 hover:underline">{{$post->author->name}}</a> 
+                    <a href="/posts?author={{$post->author->username}}" class="text-base text-gray-500 hover:underline">{{$post->author->name}}</a> 
                     in
-                    <a href="/categories/{{$post->category->slug}}" class="text-base hover:underline px-2 py-1 rounded-md bg-{{$post->category->color}}-100">{{$post->category->name}}</a> 
+                    <a href="/posts?category={{$post->category->slug}}" class="text-base hover:underline px-2 py-1 rounded-md bg-{{$post->category->color}}-100">{{$post->category->name}}</a> 
                     | {{$post->created_at->format('j F Y')}}
                 </div>
                 <p class="my-4 font-light">
@@ -50,6 +53,11 @@
                 {{-- href="/posts/{{$id}}"  --}}
                 <a href="/posts/{{$post['slug']}}" class="font-medium text-indigo-500">Read more &raquo;</a>
             </article>
-        @endforeach
+
+        @empty
+            <div class="text-red-500">
+                Im sorry the content are not found
+            </div>
+        @endforelse
     </div>
 </x-layout>
