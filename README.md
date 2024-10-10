@@ -247,3 +247,6 @@ where <code>x</code> is the number of entries to be displayed in one page. With 
 ```php
     $posts = Post::simplePaginate(x)->withQueryString();
 ```
+
+## End Result
+![alt text](repo_images/result4.png)
