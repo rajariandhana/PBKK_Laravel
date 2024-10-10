@@ -177,3 +177,76 @@ class DatabaseSeeder extends Seeder{
     }
 }
 ```
+
+## Progress up to Episode 17
+
+### N+1
+Is a common query problem when we are using Eloquent ORM. Suppose we retrieving a list with size N then for each entry it queries another data to retrieve thus N+1. Laravel has an easy way to overcome this simply by defining relations as an array in the model
+```php
+protected $with = ['author','category'];
+```
+This will automatically execute query only when needed.
+
+### Searching
+Define in model
+```
+public function scopeFilter(Builder $query, array $filters):void{
+    $query->when(
+        $filters['search'] ?? false,
+        fn($query,$search)=>
+        $query->where('title','like','%'.request('search').'%')
+    );
+    $query->when(
+        $filters['category'] ?? false,
+        fn($query,$category)=>
+        $query->whereHas('category',fn($query)=>$query->where('slug',$category))
+    );
+    $query->when(
+        $filters['author'] ?? false,
+        fn($query,$author)=>
+        $query->whereHas('author',fn($query)=>$query->where('username',$author))
+    );
+    
+}
+```
+Search form
+```blade
+<form>   
+        @csrf
+        @if(request('category'))
+            <input type="hidden" name="category" value="{{request('category')}}">
+        @endif
+        @if(request('author'))
+            <input type="hidden" name="author" value="{{request('author')}}">
+        @endif
+        <label for="search">Search</label>
+        <div>
+            <input type="text" name="search" placeholder="Search Mockups Logos..." autocomplete="off"/>
+            <button type="submit" c>Search</button>
+        </div>
+    </form>
+```
+Route
+```php
+Route::get('/posts', function () {
+    $posts = Post::filter(request(['search','category','author']))->latest();
+    return view('posts',[
+        'title'=>'Blog',
+        'posts'=> $posts
+    ]);
+});
+```
+When submit is clicked, it basically append several types of attributes to be filtered then return the entries.
+
+### Pagination
+To divide the queried data into several pages, laravel have a simple solution which is by
+```php
+    $posts = Post::simplePaginate(x);
+```
+where <code>x</code> is the number of entries to be displayed in one page. With our searching feature this introduces a new problem, when we are searching for a category then go to the next page, it removes the search and goes to the next page of unsearched entries, to solve it we can
+```php
+    $posts = Post::simplePaginate(x)->withQueryString();
+```
+
+## End Result
+![alt text](repo_images/result4.png)
